@@ -19,3 +19,6 @@ La aplicación también se puede acceder vía mobil.
 
 en LAN:
 La aplicación se puede replicar en Raspberry y desplegar de manera local realizando la actualización del servidor MQTT en el firmware del esp8266
+
+En youtube iniciamos una serie de videos que demuestran como funciona la aplicacion
+https://youtu.be/IIO82C1vLGc

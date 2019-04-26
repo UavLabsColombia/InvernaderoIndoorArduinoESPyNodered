@@ -19,24 +19,18 @@ siempre y cuando exista un separador de tipo ',' coma.
 // Update these with values suitable for your network.
 
 //Red Invernadero
-const char* ssid = "invernaderoarduino";
-const char* password = "invernaderoarduino0.1";
-//Red en casa
-//const char* ssid = "......";
-//const char* password = "Elchompiras10";
-//Red en el local
-//const char* ssid = ".......";
-//const char* password = "Arditech_.2018";
+const char* ssid = ".i.";
+const char* password = "Chespirito10";
 
 const char* mqtt_server = "108.61.86.127";
 String topic = "";
 String dataTopic = "";
 
-//Conexion UDP 
+//Conexion UDP
 WiFiUDP ntpUDP;
 
 
-//Para UTC -5.00 el TimeOffset se calculcula: -5 * 60 * 60 : -18000  
+//Para UTC -5.00 el TimeOffset se calculcula: -5 * 60 * 60 : -18000
 NTPClient timeClient(ntpUDP, "0.pool.ntp.org", -18000);
 
 // Cadena de texto recibida por serial para su tratamiento
@@ -64,8 +58,8 @@ void setup()
 
   //Se inicia el cliente NTP
   timeClient.begin();
-  
-  
+
+
   //MQTT
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
@@ -73,7 +67,7 @@ void setup()
   // Se actualiza la hora
   actualizarHora();
   delay(4000);
-  
+
 }
 
 void setup_wifi() {
@@ -143,13 +137,13 @@ String partiCadena(String data, char separator, int index)
 
 
 void actualizarHora(){
-  
+
   timeClient.update();
   if(timeClient.getYear() < 2019 || timeClient.getYear() == 1969){
     client.publish("debug,", "Fecha del server mal, leyedo de nuevo...");
     actualizarHora();
   }
-  
+
 //Envia hacia arduino la fecha para actualizarla en RTC
 Serial.print("Fecha:");
 Serial.print(timeClient.getYear());
@@ -171,13 +165,13 @@ void loop()
   if (!client.connected()) {
     reconnect();
   }
-  
+
   client.loop();
-  
+
   if (Serial.available()){
       // Recibe la cadena por el serial para separar el topic de la data y publicarlo
       str = Serial.readStringUntil('\n');
-      
+
       // Extrae la cadena antes de la ,
       topic = partiCadena(str,',', 0);
       //Serial.print("Topic:");
@@ -199,20 +193,20 @@ void loop()
 //      Serial.print(",");
 //      Serial.println(dataTopic);
 //      Serial.print(":");
-      
+
       if (topic == "setear" && dataTopic == "si")
           {
             client.publish("debug","actualizando hora");
             actualizarHora();
-          } 
-        
+          }
+
       //Publicando en mqtt
       client.publish(topicBuffer,dataTopicBuffer);
-      
+
   }
   delayMicroseconds(100);
   topic = "";
   dataTopic = "";
   //delay(200);
-  
+
 }
